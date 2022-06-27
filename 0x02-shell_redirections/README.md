@@ -1,1 +1,1 @@
- displays a confused smiley
+print Hello World
