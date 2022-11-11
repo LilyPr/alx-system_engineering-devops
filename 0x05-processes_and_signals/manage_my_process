@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#write a messge to the file
+# manages daemons
+
+while true;
+do
+    echo "I am alive!" >> /tmp/my_process
+    sleep 2
+done
