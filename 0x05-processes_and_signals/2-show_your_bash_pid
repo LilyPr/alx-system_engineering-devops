@@ -3,4 +3,4 @@
 # Displays lines containing the bash word
 # shellcheck disable=SC2009
 
-ps -lily | grep bash
+ps -aux | grep bash

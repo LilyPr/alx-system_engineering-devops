@@ -1,25 +1,14 @@
 #!/usr/bin/env bash
-#Bash script read some signals and management with processes.
+#Bash script that displays messages when read some signals
 
-FILE="/var/run/myscript.pid"
+sudo touch /var/run/myscript.pid
+sudo bash -c 'echo $$ > /var/run/myscript.pid'
 
-function clean_up()
-{
-    rm -rf $FILE
-    if $1;
-    then
-	echo "I hate the kill command"
-    fi
-    exit
-}
-
-echo "$$" > $FILE
-
-trap clean_up "true" SIGTERM
-trap clean_up "false" SIGQUIT
-trap 'echo "Y U no love me?!"' SIGINT
-
-while true;
+while true
 do
-    echo "To infinity and beyond"
+	echo "To infinitiy and beyond"
+	sleep 2
+	trap 'echo "I hate the kill command"; sudo rm /var/run/myscript.pid; exit' SIGTERM
+	trap 'echo "Y U no love me?!"' SIGINT
+	trap 'sudo rm /var/run/myscript.pid; exit' SIGQUIT
 done
