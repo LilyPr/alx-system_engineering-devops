@@ -8,8 +8,8 @@ printf "\nfrontend haproxynode
         default_backend backendnodes
 backend backendnodes
         balance roundrobin
-        server 708-web-01 54.174.44.47 check
-        server 708-web-02 52.201.219.255 check
+        server [STUDENT_ID]-web-01 54.174.44.47 check
+        server [STUDENT_ID]-web-02 52.201.219.255 check
 	"
 echo "$CONF" >> /etc/haproxy/haproxy.cfg
 echo "ENABLED=1" >> /etc/default/haproxy
