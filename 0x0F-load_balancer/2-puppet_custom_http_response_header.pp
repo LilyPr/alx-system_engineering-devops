@@ -1,10 +1,27 @@
 # A Puppet script that configures the Nginx so that its HTTP response contains a custom header
-exec {'/usr/bin/env sudo apt-get update':}
-exec {'/usr/bin/env sudo apt-get -y install nginx':}
-exec {'/usr/bin/env ufw sudo allow "Nginx HTTP"':}
-exec {'/usr/bin/env echo "Hello World!" > /var/www/html/index.nginx-debian.html':}
-exec {'/usr/bin/env echo "Ceci n\'est pas une page" > /usr/share/nginx/html/custom_404.html':}
-exec {'/usr/bin/env sed -i "/listen 80 default_server/a rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default':}
-exec {'/usr/bin/env sed -i "/listen 80 default_server/a error_page 404 /custom_404.html;location = /custom_404.html {root /usr/share/nginx/html;internal;}" /etc/nginx/sites-available/default':}
-exec {'/usr/bin/env sed -i "/listen 80 default_server/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default':}
-exec {'/usr/bin/env service nginx restart':}}
+exec { 'exec_0':
+  command => 'sudo apt-get update -y',
+  path    => ['/usr/bin', '/bin'],
+  returns => [0,1]
+}
+
+exec { 'exec_1':
+  require => Exec['exec_0'],
+  command => 'sudo apt-get install nginx -y',
+  path    => ['/usr/bin', '/bin'],
+  returns => [0,1]
+}
+
+exec { 'exec_2':
+  require => Exec['exec_1'],
+  command => 'sudo sed -i "s/server_name _;/server_name _;\n\tadd_header X-Served-By \$hostname;/" /etc/nginx/sites-enabled/default',
+  path    => ['/usr/bin', '/bin'],
+  returns => [0,1]
+}
+
+exec { 'exec_3':
+  require => Exec['exec_2'],
+  command => 'sudo service nginx start',
+  path    => ['/usr/bin', '/bin', '/usr/sbin'],
+  returns => [0,1]
+}
