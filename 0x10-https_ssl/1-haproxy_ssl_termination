@@ -38,12 +38,12 @@ defaults
         errorfile 504 /etc/haproxy/errors/504.http
 
 frontend http
-        bind --*glob*:80
+        bind *:80
         http-request set-header X-Forwarded-Proto http
         default_backend web-backend
 
 frontend www-https
-        bind --*glob*:443 ssl crt /etc/haproxy/ssl/www.myschool.tech.pem
+        bind *:443 ssl crt /etc/haproxy/ssl/www.myschool.tech.pem
         http-request set-header X-Forwarded-Proto https
         default_backend web-backend
 
