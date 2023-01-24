@@ -7,6 +7,4 @@ exec { 'http':
      	      sudo sed -i "50i$var" /etc/nginx/sites-available/default &&
      	      sudo service nginx start',
   provider => shell
-)
-
-
+}
