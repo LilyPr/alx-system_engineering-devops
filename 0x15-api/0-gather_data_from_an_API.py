@@ -1,36 +1,29 @@
 #!/usr/bin/python3
 """ Uses JSONPlaceholder API to get information about emplif __name__ == "__main__":
 """
+import requests
+from sys import argv
+
+
 if __name__ == "__main__":
-    import json
-    import requests
-    import sys
-    base_url = 'https://jsonplaceholder.typicode.com/'
-    try:
-        employee_id = sys.argv[1]
-    except:
-        print('Usage: {} employee_id'.format(sys.argv[0]))
-        exit(1)
+        Re = requests.get('https://jsonplaceholder.typicode.com/users/{:}'
+                         .format(argv[1])).json()
+        Re_two = requests.get(
+                'https://jsonplaceholder.typicode.com/todos/?userId={:}'
+                .format(argv[1])).json()
 
-    # the info about the user
-    url = base_url + 'users?id={}'.format(employee_id)
-    response = requests.get(url)
-    user = json.loads(response.text)
-    name = user[0].get('name')
+        EMPLOYEE_NAME = Re.get('name')
+        TASK_TITLE = []
+        NUMBER_OF_DONE_TASKS = 0
 
-    # the info about the user's tasks
-    url = base_url + 'todos?userId={}'.format(employee_id)
-    response = requests.get(url)
-    objs = json.loads(response.text)
-    completed = 0
-    completed_tasks = []
-    for obj in objs:
-        if obj.get('completed'):
-            completed_tasks.append(obj)
-            completed += 1
+        for task in Re_two:
+                if task.get('completed') is True:
+                        TASK_TITLE.append(task.get('title'))
+                        NUMBER_OF_DONE_TASKS += 1
+        TOTAL_NUMBER_OF_TASKS = len(Re_two)
+        print("Employee {} is done with tasks({}/{}):".
+              format(EMPLOYEE_NAME, NUMBER_OF_DONE_TASKS,
+                     TOTAL_NUMBER_OF_TASKS))
 
-    # print the output about user's task completion
-    print("{} is done with tasks({}/{}):".format(name, completed, len(objs)))
-    # print the output title of completed tasks
-    for task in completed_tasks:
-        print("\t {}".format(task.get('title')))
+        for t in TASK_TITLE:
+                print("\t {}".format(t))
